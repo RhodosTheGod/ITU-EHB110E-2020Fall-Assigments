@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int Reorder(int* min, int* max);
+void Reorder(int* min, int* max);
 
 //First index represents columns, second one represents rows
 int matrix[10][2]={{10, 8},
@@ -15,45 +15,43 @@ int matrix[10][2]={{10, 8},
                    {4 ,15}};
 
 int main(){
-    int counter;
+    //Maybe we will want to change matrix later, who knows?
+    const int LENGTH_OF_ROW = sizeof(matrix)/sizeof(matrix[0]);
 
     //Sort first column in ascending order
-    do {
-        counter  = 0;
-
-        for (int i = 0; i < 9; i++) {
-            if(Reorder(&matrix[i][0],&matrix[i+1][0])){
-                counter++;
-            }
+    for (int i = LENGTH_OF_ROW -1; i > 0; i--)
+    {
+        for (int j = 0; j < i; j++)
+        {
+            Reorder(&matrix[j][0],&matrix[j+1][0]);
         }
-    } while (counter != 0);
+    }
 
     //Sort second column in descending order
-    do {
-        counter  = 0;
-        for (int i = 9; i > 0 ; i--) {
-            if(Reorder(&matrix[i][1],&matrix[i-1][1])){
-                counter++;
-            }
+    for (int i = 0; i < LENGTH_OF_ROW; i++)
+    {
+        for (int j = LENGTH_OF_ROW - 1; j > i; j--)
+        {
+            Reorder(&matrix[j][1],&matrix[j-1][1]);
         }
-    } while (counter != 0);
+    }
 
     //Print on the screen
     printf("SORTED MATRIX \nFirst column is in ascending order.\nSecond column is in descending order.\n");
 
-    for (int i = 0; i < 10; ++i) {
+    for (int i = 0; i < LENGTH_OF_ROW; ++i) {
         printf("%d\t%d\n",matrix[i][0],matrix[i][1]);
     }
 
     printf("\nTRANSPOSE OF SORTED MATRIX :\n");
 
-    for (int i = 0; i < 10; ++i) {
+    for (int i = 0; i < LENGTH_OF_ROW; ++i) {
         printf("%d\t",matrix[i][0]);
     }
 
     printf("\n");
 
-    for (int i = 0; i < 10; ++i) {
+    for (int i = 0; i < LENGTH_OF_ROW; ++i) {
         printf("%d\t",matrix[i][1]);
     }
 
@@ -62,15 +60,12 @@ int main(){
 
 // Here is a function used for increasing reusability.
 // Takes 2 int pointers as parameters.
-// If they needs reorder returns true, otherwise false
-int Reorder(int *min, int *max){
+void Reorder(int *min, int *max){
 
     if(*min>*max){
         int cache = *min;
         *min = *max;
         *max = cache;
         //printf("min : %d, max: %d, cache: %d", *min, *max, cache);
-        return 1;
-    }
-    return 0;
+     }
 }
